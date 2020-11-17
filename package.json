@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "ffmpeg-static": "^4.2.7",
-    "ytdl-core": "^4.0.0"
+    "ytdl-core": "^4.0.4"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",
