@@ -11,12 +11,12 @@
   "author": "Tim Baechle",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^10.1.5",
+    "electron": "^10.1.6",
     "electron-builder": "^22.9.1"
   },
   "dependencies": {
     "ffmpeg-static": "^4.2.7",
-    "ytdl-core": "^4.0.4"
+    "ytdl-core": "^4.0.6"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",
