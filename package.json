@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "electron . --debug",
     "build": "electron-builder"
   },
   "keywords": [],
@@ -16,7 +17,7 @@
   },
   "dependencies": {
     "ffmpeg-static": "^4.2.7",
-    "ytdl-core": "^4.0.6"
+    "ytdl-core": "^4.1.2"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",

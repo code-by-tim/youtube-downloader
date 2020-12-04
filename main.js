@@ -1,5 +1,7 @@
 const { app, BrowserWindow, Menu} = require('electron');
 
+const debug = /--debug/.test(process.argv[2]);
+
 global.storageLocation = {path: undefined};
 var win;
 
@@ -56,7 +58,12 @@ function createWindow () {
   });
 
   win.loadFile('index.html');
-  //win.webContents.openDevTools();
+  
+  //Launch fullscreen with DevTools open if in DebugMode
+  if(debug) {
+    win.webContents.openDevTools();
+    win.maximize();
+  }
 
   //Set my custom menu
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
