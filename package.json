@@ -16,6 +16,7 @@
     "electron-builder": "^22.9.1"
   },
   "dependencies": {
+    "electron-updater": "^4.3.5",
     "ffmpeg-static": "^4.2.7",
     "ytdl-core": "^4.1.2"
   },
@@ -28,6 +29,10 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
+    },
+    "publish": {
+      "provider": "github"
     }
+    
   }
 }

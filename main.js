@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu} = require('electron');
+const { autoUpdater } = require("electron-updater");
 
 const debug = /--debug/.test(process.argv[2]);
 
@@ -69,7 +70,10 @@ function createWindow () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then( () => {
+  createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
