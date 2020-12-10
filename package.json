@@ -7,7 +7,7 @@
     "start": "electron .",
     "dev": "electron . --debug",
     "build": "electron-builder build",
-    "deploy": "electron-builder build --publish always"
+    "release": "build"
   },
   "keywords": [],
   "author": "Tim Baechle",
