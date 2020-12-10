@@ -1,12 +1,13 @@
 {
   "name": "youtube-downloader",
-  "version": "1.0.1",
+  "version": "0.0.1",
   "description": "A simple audio and video downloader for Youtube without any viruses.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron . --debug",
-    "build": "electron-builder"
+    "build": "electron-builder build",
+    "deploy": "electron-builder build --publish always"
   },
   "keywords": [],
   "author": "Tim Baechle",

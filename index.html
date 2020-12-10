@@ -7,13 +7,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="headline">YouTube-Downloader</h1>
+    <div id="mainContent">
+        <h1 id="headline">YouTube-Downloader</h1>
 
-    <p><input class="URL-input" size="30" placeholder="https://www.youtube.com/example"></p>
-    <p><div id="storageLocation">Loading...</div></p>
-    <p><input type="radio" name="file-format" id="video">Video<input type="radio" name="file-format" id="audio" checked="checked">Audio</p>
-    <p><button class="button" id="button">Download</button></p>
-    <div id="statusLine">Download successfull! App is ready for next download!</div>
+        <p><input class="URL-input" size="30" placeholder="https://www.youtube.com/example"></p>
+        <p><div id="storageLocation">Loading...</div></p>
+        <p><input type="radio" name="file-format" id="video">Video<input type="radio" name="file-format" id="audio" checked="checked">Audio</p>
+        <p><button class="button" id="button">Download</button></p>
+        <div id="statusLine">Download successfull! App is ready for next download!</div>
+    </div>
+
+    <div id="infoBar" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">Close</button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">Restart</button>
+    </div>
+    
     <script src="renderer.js"></script>
 </body>
 </html>

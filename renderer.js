@@ -1,4 +1,4 @@
-const { remote } = require('electron');
+const { remote, ipcRenderer } = require('electron');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 var childProcess, ffmpeg;
@@ -177,4 +177,30 @@ function downloadVideo(url) {
     getVideoTitle(url).then( (videoTitle) => {
         ffmpegProcess.stdio[6].pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.mkv`));
     });
+}
+
+
+
+//Following Code handles autoUpdates --------------------------------------------------------------------
+const infoBar = document.getElementById('infoBar');
+const message = document.getElementById('message');
+const restartButton = document.getElementById('restart-button');
+
+ipcRenderer.on('update_available', () => {
+    ipcRenderer.removeAllListeners('update_available');
+    message.innerText = 'A new update is available. Downloading now...';
+    infoBar.classList.remove('hidden');
+});
+ipcRenderer.on('update_downloaded', () => {
+    ipcRenderer.removeAllListeners('update_downloaded');
+    message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+    restartButton.classList.remove('hidden');
+    infoBar.classList.remove('hidden');
+});
+
+function closeNotification() {
+    infoBar.classList.add('hidden');
+}
+function restartApp() {
+    ipcRenderer.send('restart_app');
 }

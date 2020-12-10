@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu} = require('electron');
+const { app, BrowserWindow, Menu, ipcMain} = require('electron');
 const { autoUpdater } = require("electron-updater");
 
 const debug = /--debug/.test(process.argv[2]);
@@ -59,7 +59,7 @@ function createWindow () {
   });
 
   win.loadFile('index.html');
-  
+
   //Launch fullscreen with DevTools open if in DebugMode
   if(debug) {
     win.webContents.openDevTools();
@@ -68,12 +68,14 @@ function createWindow () {
 
   //Set my custom menu
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+
+  //Check for updates once the window is ready
+  win.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  })
 }
 
-app.whenReady().then( () => {
-  createWindow();
-  autoUpdater.checkForUpdatesAndNotify();
-});
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -87,6 +89,8 @@ app.on('activate', () => {
   }
 });
 
+//Opens a dialog and - if choosen by the user - sets the storageLocation variable
+//Afterwards it reloads the window
 function chooseStorageLocation() {
   if(app.isReady()){
     const { dialog } = require('electron');
@@ -98,3 +102,15 @@ function chooseStorageLocation() {
     });
   }
 }
+
+autoUpdater.on('update-available', () => {
+  win.webContents.send('update_available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  win.webContents.send('update_downloaded');
+});
+
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
+})
