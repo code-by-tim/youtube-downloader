@@ -185,6 +185,7 @@ function downloadVideo(url) {
 const infoBar = document.getElementById('infoBar');
 const message = document.getElementById('message');
 const restartButton = document.getElementById('restart-button');
+const closeButton = document.getElementById('close-button');
 
 ipcRenderer.on('update_available', () => {
     ipcRenderer.removeAllListeners('update_available');
@@ -198,9 +199,10 @@ ipcRenderer.on('update_downloaded', () => {
     infoBar.classList.remove('hidden');
 });
 
-function closeNotification() {
+closeButton.addEventListener('click', () => {
     infoBar.classList.add('hidden');
-}
-function restartApp() {
+});
+
+restartButton.addEventListener('click', () => {
     ipcRenderer.send('restart_app');
-}
+});
