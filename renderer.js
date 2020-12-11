@@ -198,7 +198,6 @@ ipcRenderer.on('update_downloaded', () => {
     infoBar.classList.remove('hidden');
 });
 
-//commit
 function closeNotification() {
     infoBar.classList.add('hidden');
 }
