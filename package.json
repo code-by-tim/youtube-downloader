@@ -13,7 +13,7 @@
   "author": "Tim Baechle",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^10.1.7",
+    "electron": "^10.2.0",
     "electron-builder": "^22.9.1"
   },
   "dependencies": {

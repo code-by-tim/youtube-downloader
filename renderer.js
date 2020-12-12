@@ -37,7 +37,7 @@ button.addEventListener('click', () => {
         if(videoRequested){
             downloadVideo(url);
         } else {
-            downloadAudio(url);            
+            downloadAudio(url);  
         }
     } else {
         if(storageLocation == undefined) {
@@ -83,10 +83,8 @@ function downloadAudio(url) {
 
     getVideoTitle(url).then( (videoTitle) => {
         ytdl(url, {
-        quality: 'highestaudio',
-        filter: 'audioonly',
-        format: 'mp3'
-        }).pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.mp3`));
+        quality: '140'
+        }).pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.m4a`));
 
         //Inform the user about the successful download
         statusLine.innerHTML = "Download successfull! App is ready for the next download";
