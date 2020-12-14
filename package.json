@@ -24,15 +24,9 @@
   "build": {
     "appId": "com.timba.youtube-downloader",
     "productName": "Youtube Downloader",
-    "directories": {
-      "output": "dist"
-    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    },
-    "publish": {
-      "provider": "github"
     }
   }
 }
