@@ -2,32 +2,35 @@ const { remote, ipcRenderer } = require('electron');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 var childProcess, ffmpeg;
-/*
-To do:
-Maybe in the future: Get the video output to be mp4
-*/
-var storageLocation;
+let storageLocation = undefined;
 
 //Regular expression matching all unallowed characters for a windows path/file + dots in one string.
 //Will potentially match several because of the global flag g.
 regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
 
-var formatInput = document.getElementsByName("file-format");
-var button = document.getElementById("button");
-var urlInput = document.querySelector('.URL-input');
-var storageLine = document.getElementById("storageLocation");
-var statusLine = document.getElementById("statusLine");
-var versionNumber = document.getElementById('versionNumber');
+//Assign important Html Objects to variables
+let formatInput = document.getElementsByName("file-format");
+let button = document.getElementById("button");
+let urlInput = document.querySelector('.URL-input');
+let storageLine = document.getElementById("storageLocation");
+let statusLine = document.getElementById("statusLine");
+let versionNumber = document.getElementById('versionNumber');
+let updateMessageBox = document.getElementById('updateMessageBox');
+let updateMessage = document.getElementById('updateMessage');
+let updateButton = document.getElementById('update-button');
+let closeButton = document.getElementById('close-button');
 
 //Inform the user about the current download status and the storageLocation.
 window.onload = function () {
-    storageLocation = remote.getGlobal('storageLocation').path;
     storageLine.innerHTML = `Downloads saved to: ${storageLocation}`;
-    let appVersion = remote.getGlobal('storageLocation').version;
-    versionNumber.innerHTML = appVersion;
-
+    versionNumber.innerHTML = remote.getGlobal('appVersion');
 }
-statusLine.innerHTML = "Ready for download!";
+
+//Set storageLocation variable if it was set by user
+ipcRenderer.on('storageLocation-set', (event, message) => {
+    storageLocation = message;
+    storageLine.innerHTML = `Downloads saved to: ${storageLocation}`;
+});
 
 /*
  * Event Listener of the download-button. When clicked it checks if audio or video was requested and what the url is.
@@ -181,30 +184,25 @@ function downloadVideo(url) {
     });
 }
 
-
-
-//Following Code handles autoUpdates --------------------------------------------------------------------
-const updateMessageBox = document.getElementById('updateMessageBox');
-const updateMessage = document.getElementById('updateMessage');
-const restartButton = document.getElementById('restart-button');
-const closeButton = document.getElementById('close-button');
-
+//Following Code handles autoUpdates --------------------------------------------------------------------------
 ipcRenderer.on('update_available', () => {
     ipcRenderer.removeAllListeners('update_available');
     updateMessage.innerText = 'A new update is available. Downloading now...';
     updateMessageBox.classList.remove('hidden');
 });
+
 ipcRenderer.on('update_downloaded', () => {
     ipcRenderer.removeAllListeners('update_downloaded');
-    updateMessage.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
-    restartButton.classList.remove('hidden');
+    updateMessage.innerText = 'Update Downloaded. Update now?';
+    updateButton.classList.remove('hidden');
     updateMessageBox.classList.remove('hidden');
 });
 
+//Handle updateMessageBox clicks
 closeButton.addEventListener('click', () => {
     updateMessageBox.classList.add('hidden');
 });
 
-restartButton.addEventListener('click', () => {
-    ipcRenderer.send('restart_app');
+updateButton.addEventListener('click', () => {
+    ipcRenderer.send('quit-and-update');
 });

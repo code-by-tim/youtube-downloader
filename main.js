@@ -1,11 +1,11 @@
 const { app, BrowserWindow, Menu, ipcMain} = require('electron');
 const { autoUpdater } = require("electron-updater");
+autoUpdater.autoInstallOnAppQuit = false; //Compulsory: If not updating might not work
 
 const debug = /--debug/.test(process.argv[2]);
 
-global.storageLocation = {path: undefined,
-                          version: app.getVersion()};
-var win;
+global.appVersion = app.getVersion();
+let win;
 
 const menuTemplate = [
   {
@@ -69,25 +69,24 @@ function createWindow () {
 
   //Set my custom menu
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
-
-  //Check for updates once the window is ready
-  win.once('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify();
-  })
 }
-
-app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-    console.log("Was here");
-  }
-});
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
+  }
+});
+
+//When the app is ready, create window and check for updates
+app.whenReady().then( () => {
+  createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
+//Handle how to behave when quitting the app
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
 });
 
@@ -98,13 +97,14 @@ function chooseStorageLocation() {
     const { dialog } = require('electron');
     dialog.showOpenDialog({ properties: ['openDirectory'] }).then( (result) => {
       if(!result.canceled) {
-        storageLocation.path = result.filePaths[0];
-        win.reload();
+        let path = result.filePaths[0];
+        win.webContents.send('storageLocation-set', path);
       }
     });
   }
 }
 
+//React on autoUpdater Events
 autoUpdater.on('update-available', () => {
   win.webContents.send('update_available');
 });
@@ -113,6 +113,7 @@ autoUpdater.on('update-downloaded', () => {
   win.webContents.send('update_downloaded');
 });
 
-ipcMain.on('restart_app', () => {
+//Update the app when requested
+ipcMain.on('quit-and-update', () => {
   autoUpdater.quitAndInstall();
 })
