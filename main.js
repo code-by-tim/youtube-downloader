@@ -3,7 +3,8 @@ const { autoUpdater } = require("electron-updater");
 
 const debug = /--debug/.test(process.argv[2]);
 
-global.storageLocation = {path: undefined};
+global.storageLocation = {path: undefined,
+                          version: app.getVersion()};
 var win;
 
 const menuTemplate = [
@@ -80,6 +81,7 @@ app.whenReady().then(createWindow);
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+    console.log("Was here");
   }
 });
 

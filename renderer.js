@@ -17,11 +17,15 @@ var button = document.getElementById("button");
 var urlInput = document.querySelector('.URL-input');
 var storageLine = document.getElementById("storageLocation");
 var statusLine = document.getElementById("statusLine");
+var versionNumber = document.getElementById('versionNumber');
 
 //Inform the user about the current download status and the storageLocation.
 window.onload = function () {
     storageLocation = remote.getGlobal('storageLocation').path;
     storageLine.innerHTML = `Downloads saved to: ${storageLocation}`;
+    let appVersion = remote.getGlobal('storageLocation').version;
+    versionNumber.innerHTML = appVersion;
+
 }
 statusLine.innerHTML = "Ready for download!";
 
@@ -180,25 +184,25 @@ function downloadVideo(url) {
 
 
 //Following Code handles autoUpdates --------------------------------------------------------------------
-const infoBar = document.getElementById('infoBar');
-const message = document.getElementById('message');
+const updateMessageBox = document.getElementById('updateMessageBox');
+const updateMessage = document.getElementById('updateMessage');
 const restartButton = document.getElementById('restart-button');
 const closeButton = document.getElementById('close-button');
 
 ipcRenderer.on('update_available', () => {
     ipcRenderer.removeAllListeners('update_available');
-    message.innerText = 'A new update is available. Downloading now...';
-    infoBar.classList.remove('hidden');
+    updateMessage.innerText = 'A new update is available. Downloading now...';
+    updateMessageBox.classList.remove('hidden');
 });
 ipcRenderer.on('update_downloaded', () => {
     ipcRenderer.removeAllListeners('update_downloaded');
-    message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+    updateMessage.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
     restartButton.classList.remove('hidden');
-    infoBar.classList.remove('hidden');
+    updateMessageBox.classList.remove('hidden');
 });
 
 closeButton.addEventListener('click', () => {
-    infoBar.classList.add('hidden');
+    updateMessageBox.classList.add('hidden');
 });
 
 restartButton.addEventListener('click', () => {
