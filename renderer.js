@@ -15,6 +15,7 @@ let urlInput = document.querySelector('.URL-input');
 let storageLine = document.getElementById("storageLocation");
 let statusLine = document.getElementById("statusLine");
 let versionNumber = document.getElementById('versionNumber');
+let updateInfo = document.getElementById('updateInfo');
 let updateMessageBox = document.getElementById('updateMessageBox');
 let updateMessage = document.getElementById('updateMessage');
 let updateButton = document.getElementById('update-button');
@@ -201,6 +202,7 @@ ipcRenderer.on('update_downloaded', () => {
 //Handle updateMessageBox clicks
 closeButton.addEventListener('click', () => {
     updateMessageBox.classList.add('hidden');
+    updateInfo.classList.remove('hidden');
 });
 
 updateButton.addEventListener('click', () => {
