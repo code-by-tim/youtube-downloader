@@ -7,26 +7,39 @@
 }
 
 .button {
-    background-color: rgb(17, 81, 255);
     border: none;
-    border-radius: 4px;
     color: white;
-    padding: 15px 32px;
+    background-color: red;
+    border-radius: 4px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    padding: 10px 25px;
+    margin: 0px 5px;
+}
+
+#button {
+    background-color: rgb(17, 81, 255);
+    padding: 15px 32px;
     font-size: 14px;
 }
 
-#infoBar {
+#footer {
     position: fixed;
     bottom: 20px;
     left: 20px;
+}
+
+#updateMessageBox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     width: 200px;
     padding: 20px;
     border-radius: 5px;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .hidden {
