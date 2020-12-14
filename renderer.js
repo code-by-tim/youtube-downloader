@@ -8,7 +8,7 @@ let storageLocation = undefined;
 //Will potentially match several because of the global flag g.
 regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
 
-//Assign important Html Objects to variables
+//Assign important HTML Objects to variables
 let formatInput = document.getElementsByName("file-format");
 let button = document.getElementById("button");
 let urlInput = document.querySelector('.URL-input');
