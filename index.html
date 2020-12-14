@@ -17,12 +17,18 @@
         <div id="statusLine">Download successfull! App is ready for next download!</div>
     </div>
 
-    <div id="infoBar" class="hidden">
-        <p id="message"></p>
-        <button id="close-button">Close</button>
-        <button id="restart-button" class="hidden">Restart</button>
+    <div id="updateMessageBox" class="">
+        <p id="updateMessage">Update Available</p>
+        <button id="close-button" class="button">Close</button><button id="restart-button" class="button hidden">Restart</button>
     </div>
     
+    <div id="footer">
+        <div id="versionInfo">
+            Current Version: <span id="versionNumber">vX.Y.Z</span>
+        </div>
+        <div id="updateInfo" class="hidden">Update available</div>
+    </div>
+
     <script src="renderer.js"></script>
 </body>
 </html>
