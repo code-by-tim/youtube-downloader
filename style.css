@@ -18,6 +18,10 @@
     margin: 0px 5px;
 }
 
+.button:hover {
+    cursor: pointer;
+}
+
 #button {
     background-color: rgb(17, 81, 255);
     padding: 15px 32px;
@@ -40,6 +44,14 @@
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     text-align: center;
+}
+
+#updateInfo {
+    color: blue;
+}
+
+#updateInfo:hover {
+    cursor: pointer;
 }
 
 .hidden {

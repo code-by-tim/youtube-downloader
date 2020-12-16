@@ -67,16 +67,18 @@ function getValidPathString (string) {
 *It also checks the video title for unallowed characters and changes it if necessary, using the getValidPathString()-function.
 *Returns: A resolved Promise, returning the videoTitle
 */
-function getVideoTitle(url) {
+async function getVideoTitle(url) {
     let videoTitle;
-    try {
-        ytdl.getBasicInfo(url).then( (result) => {
+    videoTitle = await ytdl.getBasicInfo(url).then( (result) => {
             videoTitle = result.player_response.videoDetails.title;
             videoTitle = getValidPathString(videoTitle);
+            return videoTitle;
+        }).catch( (reason) => {
+            console.log(reason);
+            videoTitle = new Date().getTime();
+            return videoTitle;
         });
-    } catch (error) {
-        videoTitle = new Date().getTime();
-    }
+    
     return Promise.resolve(videoTitle);
 }
 
@@ -91,10 +93,12 @@ function downloadAudio(url) {
         ytdl(url, {
         quality: '140'
         }).pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.m4a`));
-
+    
+    }).then( () => {
         //Inform the user about the successful download
         statusLine.innerHTML = "Download successfull! App is ready for the next download";
     })
+
     //Inform the user about possible unsuccessful download
     .catch( (reason) => {
         statusLine.innerHTML = "Error! You will find more details in the developer tools."
@@ -167,8 +171,6 @@ function downloadVideo(url) {
 
         ffmpegProcess.on('close', () => {
             process.stdout.write('\n\n\n\n');
-            //Inform the user about the successful download
-            statusLine.innerHTML = "Download successfull! App is ready for the next download";
         });
 
         // Link streams
@@ -187,6 +189,9 @@ function downloadVideo(url) {
         video.pipe(ffmpegProcess.stdio[5]);
         getVideoTitle(url).then( (videoTitle) => {
             ffmpegProcess.stdio[6].pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.mkv`));
+        }).then( () => {
+            //Inform the user about the successful download
+            statusLine.innerHTML = "Download successfull! App is ready for the next download";
         });
 
     //Catch errors and inform user
@@ -218,4 +223,8 @@ closeButton.addEventListener('click', () => {
 
 updateButton.addEventListener('click', () => {
     ipcRenderer.send('quit-and-update');
+});
+
+updateInfo.addEventListener('click', () => {
+    updateMessageBox.classList.remove('hidden');
 });
