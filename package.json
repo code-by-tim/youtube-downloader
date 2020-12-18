@@ -1,6 +1,6 @@
 {
   "name": "youtube-downloader",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A simple audio and video downloader for Youtube without any viruses.",
   "main": "main.js",
   "scripts": {
@@ -19,7 +19,7 @@
   "dependencies": {
     "electron-updater": "^4.3.5",
     "ffmpeg-static": "^4.2.7",
-    "ytdl-core": "^4.1.6"
+    "ytdl-core": "^4.2.0"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",
