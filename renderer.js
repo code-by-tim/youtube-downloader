@@ -1,8 +1,9 @@
-const { remote, ipcRenderer } = require('electron');
+const { remote, ipcRenderer, shell } = require('electron');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 var childProcess, ffmpeg;
 let storageLocation = undefined;
+let store = remote.getGlobal('store');
 
 //Regular expression matching all unallowed characters for a windows path/file + dots in one string.
 //Will potentially match several because of the global flag g.
@@ -45,7 +46,7 @@ button.addEventListener('click', () => {
         if(videoRequested){
             downloadVideo(url);
         } else {
-            downloadAudio(url);  
+            downloadAudio(url);
         }
     } else {
         if(storageLocation == undefined) {
@@ -85,18 +86,26 @@ async function getVideoTitle(url) {
 /*
  * This function downloads the audio file and saves it with video-title as the filename.
  */
-function downloadAudio(url) {
+async function downloadAudio(url) {
+    let filePath;
+
     //Update the status line
     statusLine.innerHTML = "Downloading audio file...";
 
     getVideoTitle(url).then( (videoTitle) => {
+        filePath = `${storageLocation}\\${videoTitle}.m4a`;
         ytdl(url, {
         quality: '140'
-        }).pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.m4a`));
+        }).pipe(fs.createWriteStream(filePath));
     
     }).then( () => {
         //Inform the user about the successful download
         statusLine.innerHTML = "Download successfull! App is ready for the next download";
+        
+        //Open folder with downloaded file if set by user
+        if(store.get('openDirPastDownload')){
+            shell.showItemInFolder(filePath);
+        }
     })
 
     //Inform the user about possible unsuccessful download
@@ -112,6 +121,8 @@ function downloadAudio(url) {
 *The video is currently saved as a matroska .mkv file.
 */
 function downloadVideo(url) {
+    let filePath;
+
     //Update the status line
     statusLine.innerHTML = "Downloading video file...";
     
@@ -188,10 +199,16 @@ function downloadVideo(url) {
         audio.pipe(ffmpegProcess.stdio[4]);
         video.pipe(ffmpegProcess.stdio[5]);
         getVideoTitle(url).then( (videoTitle) => {
-            ffmpegProcess.stdio[6].pipe(fs.createWriteStream(`${storageLocation}\\${videoTitle}.mkv`));
+            filePath = `${storageLocation}\\${videoTitle}.mkv`;
+            ffmpegProcess.stdio[6].pipe(fs.createWriteStream(filePath));
         }).then( () => {
             //Inform the user about the successful download
             statusLine.innerHTML = "Download successfull! App is ready for the next download";
+
+            //Open folder with downloaded file if set by user
+            if(store.get('openDirPastDownload')){
+                shell.showItemInFolder(filePath);
+            }
         });
 
     //Catch errors and inform user

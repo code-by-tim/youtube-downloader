@@ -1,19 +1,24 @@
 const { app, BrowserWindow, Menu, ipcMain} = require('electron');
 const { autoUpdater } = require("electron-updater");
+const Store = require('./modules/store');
+
 autoUpdater.autoInstallOnAppQuit = false; //Compulsory: If not updating might not work
 
+// Class Variables ///////////////////////////////////////////////////////////////////////////////////////////////
 const debug = /--debug/.test(process.argv[2]);
 
+//Implement default values if stored date could not be read
+let defaultValues = {
+  openDirPastDownload: true
+}
+const store = new Store(defaultValues);
+
 global.appVersion = app.getVersion();
+global.store = store;
 let win;
+let menu;
 
 const menuTemplate = [
-  {
-    label: 'File',
-    submenu: [
-      { role: 'quit' },
-    ]
-  },
   {
     label: 'View',
     submenu: [
@@ -27,17 +32,32 @@ const menuTemplate = [
     submenu: [
       { label: 'Choose storage location',
         click: chooseStorageLocation
+      },
+      { label: 'Open file path after download',
+        id: 'openDirCheckbox',
+        type: 'checkbox',
+        checked: store.get('openDirPastDownload'), //DefaultValue: true
+        click: async (menuItem, browserWindow, event) => {
+          store.set('openDirPastDownload', menuItem.checked);
+        }
       }
     ]
   },
   {
     label: 'Help',
     submenu: [
-      { label: 'Learn More',
+      { label: 'About Electron',
         click: async () => {
           const { shell } = require('electron');
           await shell.openExternal('https://electronjs.org');
-      }},
+        }
+      },
+      { label: 'GitHub Repository',
+        click: async () => {
+          const { shell } = require('electron');
+          await shell.openExternal('https://github.com/code-by-tim/youtube-downloader');
+        }
+      },
       { type: 'separator' },
       { label: 'By Tim Bächle',
         enabled: false }
@@ -45,6 +65,7 @@ const menuTemplate = [
   }
 ]
 
+// Main logic ////////////////////////////////////////////////////////////////////////////////////////////////////
 function createWindow () {
   win = new BrowserWindow({
     width: 800,
@@ -65,7 +86,8 @@ function createWindow () {
   }
 
   //Set my custom menu
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+  menu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(menu);
 }
 
 app.on('activate', () => {
