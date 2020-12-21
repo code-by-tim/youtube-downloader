@@ -15,7 +15,7 @@ class Store {
         })
     }
 
-    //This will return the value for the given key
+    //This will return the value for the given key. Returns 'undefined' if the specified key was not found
     get(key) {
         return this.store[key];
     }
