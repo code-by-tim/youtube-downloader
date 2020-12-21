@@ -9,7 +9,8 @@ const debug = /--debug/.test(process.argv[2]);
 
 //Implement default values if stored date could not be read
 let defaultValues = {
-  openDirPastDownload: true
+  openDirPastDownload: true,
+  rememberStorageLocation: false
 }
 const store = new Store(defaultValues);
 
@@ -34,11 +35,18 @@ const menuTemplate = [
         click: chooseStorageLocation
       },
       { label: 'Open file path after download',
-        id: 'openDirCheckbox',
         type: 'checkbox',
         checked: store.get('openDirPastDownload'), //DefaultValue: true
-        click: async (menuItem, browserWindow, event) => {
+        click: (menuItem, browserWindow, event) => {
           store.set('openDirPastDownload', menuItem.checked);
+        }
+      },
+      {
+        label: 'Remember storage location',
+        type: 'checkbox',
+        checked: store.get('rememberStorageLocation'), //DevaultValue: false
+        click: (menuItem, browserWindow, event) => {
+          store.set('rememberStorageLocation', menuItem.checked);
         }
       }
     ]
@@ -118,6 +126,7 @@ function chooseStorageLocation() {
       if(!result.canceled) {
         let path = result.filePaths[0];
         win.webContents.send('storageLocation-set', path);
+        store.set('storageLocation', path);
       }
     });
   }

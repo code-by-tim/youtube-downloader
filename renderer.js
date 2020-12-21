@@ -5,6 +5,10 @@ var childProcess, ffmpeg;
 let storageLocation = undefined;
 let store = remote.getGlobal('store');
 
+if(store.get('rememberStorageLocation')){
+    storageLocation = store.get('storageLocation');
+}
+
 //Regular expression matching all unallowed characters for a windows path/file + dots in one string.
 //Will potentially match several because of the global flag g.
 regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
