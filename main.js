@@ -107,7 +107,8 @@ app.on('activate', () => {
 //When the app is ready, create window and check for updates
 app.whenReady().then( () => {
   createWindow();
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdatesAndNotify(); // Change to .checkForUpdates. Still throws unhandled promise rejection
+  //in development mode
 });
 
 //Handle how to behave when quitting the app
