@@ -16,7 +16,7 @@ regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
 //Assign important HTML Objects to variables
 let formatInput = document.getElementsByName("file-format");
 let button = document.getElementById("button");
-let urlInput = document.querySelector('.URL-input');
+let urlInput = document.getElementById("URL-input");
 let storageLine = document.getElementById("storageLocation");
 let statusLine = document.getElementById("statusLine");
 let versionNumber = document.getElementById('versionNumber');
@@ -45,19 +45,26 @@ ipcRenderer.on('storageLocation-set', (event, message) => {
 button.addEventListener('click', () => {
     var videoRequested = formatInput[0]['checked']; //Audio is checked per default. So if video is false, audio is true.
     var url = urlInput.value;
+    let storageIsSet = (storageLocation != undefined);
     
-    if(ytdl.validateURL(url) && storageLocation != undefined){
+    if(ytdl.validateURL(url) && storageIsSet){
         if(videoRequested){
             downloadVideo(url);
         } else {
             downloadAudio(url);
         }
     } else {
-        if(storageLocation == undefined) {
+        if(!storageIsSet) {
             statusLine.innerHTML = "Please set a storage location under Settings/Choose storage location";
         } else {
             statusLine.innerHTML = "Please enter a valid YouTube-Link!";
         }
+    }
+
+    //If an undefined storage was not a problem, select the input
+    if(storageIsSet){
+        urlInput.focus();
+        urlInput.select();
     }
 });
 
