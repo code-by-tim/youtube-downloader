@@ -17,6 +17,7 @@ regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
 let formatInput = document.getElementsByName("file-format");
 let button = document.getElementById("button");
 let urlInput = document.getElementById("URL-input");
+let progressBar = document.getElementById("progressBar");
 let storageLine = document.getElementById("storageLocation");
 let statusLine = document.getElementById("statusLine");
 let versionNumber = document.getElementById('versionNumber');
@@ -67,6 +68,15 @@ button.addEventListener('click', () => {
         urlInput.select();
     }
 });
+
+/* This method updates the progress bar.
+* @param downloadedFileSize
+* @param fullFileSize
+*/
+function updateProgressBar(downloadedFileSize, fullFileSize) {
+    //calculate Progress
+    //update progress bar
+}
 
 //This function removes all unallowed characters from the string, so the string can serve as a filename on windows.
 //Unallowed characters are /\*?:"<>| Additionally for this programm: Remove dots.
