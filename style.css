@@ -6,20 +6,6 @@
     font-size: medium;
 }
 
-#barContainer {
-    background-color: grey;
-    min-width: 150px;
-    width: 283px;
-    margin: auto;
-
-}
-
-#progressBar {
-    width: 0%;
-    height: 30px;
-    background-color: green;
-}
-
 .button {
     border: none;
     color: white;

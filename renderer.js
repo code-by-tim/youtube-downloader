@@ -69,15 +69,6 @@ button.addEventListener('click', () => {
     }
 });
 
-/* This method updates the progress bar.
-* @param downloadedFileSize
-* @param fullFileSize
-*/
-function updateProgressBar(downloadedFileSize, fullFileSize) {
-    //calculate Progress
-    //update progress bar
-}
-
 //This function removes all unallowed characters from the string, so the string can serve as a filename on windows.
 //Unallowed characters are /\*?:"<>| Additionally for this programm: Remove dots.
 function getValidPathString (string) {
@@ -117,7 +108,8 @@ async function downloadAudio(url) {
         filePath = `${storageLocation}\\${videoTitle}.m4a`;
         ytdl(url, {
         quality: '140'
-        }).pipe(fs.createWriteStream(filePath));
+        }).pipe(fs.createWriteStream(filePath)); //Writable Stream has "finish"-event.
+        //Enter in google: "node js wait for pipe to finish" --> Stackoverflow
     
     }).then( () => {
         //Inform the user about the successful download
