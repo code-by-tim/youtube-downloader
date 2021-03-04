@@ -17,7 +17,6 @@ regExp = /[\\\/\*\?\:\<\>\|\"\.]/g;
 let formatInput = document.getElementsByName("file-format");
 let button = document.getElementById("button");
 let urlInput = document.getElementById("URL-input");
-let progressBar = document.getElementById("progressBar");
 let storageLine = document.getElementById("storageLocation");
 let statusLine = document.getElementById("statusLine");
 let versionNumber = document.getElementById('versionNumber');
@@ -104,13 +103,21 @@ async function downloadAudio(url) {
     //Update the status line
     statusLine.innerHTML = "Downloading audio file...";
 
-    getVideoTitle(url).then( (videoTitle) => {
+    getVideoTitle(url).then( async (videoTitle) => {
         filePath = `${storageLocation}\\${videoTitle}.m4a`;
+        
+        
+        
         ytdl(url, {
+            quality: '140'
+        }).pipe(fs.createWriteStream(filePath, {emitClose: true}));
+        
+        //await new Promise( () => Event.on("close", fulfill));
+
+        /*ytdl(url, {
         quality: '140'
-        }).pipe(fs.createWriteStream(filePath)); //Writable Stream has "finish"-event.
-        //Enter in google: "node js wait for pipe to finish" --> Stackoverflow
-    
+        }).pipe(fs.createWriteStream(filePath));*/
+
     }).then( () => {
         //Inform the user about the successful download
         statusLine.innerHTML = "Download successfull! App is ready for the next download";
@@ -123,8 +130,9 @@ async function downloadAudio(url) {
 
     //Inform the user about possible unsuccessful download
     .catch( (reason) => {
+        console.log(reason);
         statusLine.innerHTML = "Error! You will find more details in the developer tools."
-            + " <p>Please contact the developer.</p>";
+            + "<p>Please contact the developer.</p>";
     });
 }
 
