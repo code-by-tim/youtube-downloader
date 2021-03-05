@@ -103,20 +103,19 @@ async function downloadAudio(url) {
     //Update the status line
     statusLine.innerHTML = "Downloading audio file...";
 
-    getVideoTitle(url).then( async (videoTitle) => {
+    getVideoTitle(url).then( (videoTitle) => {
         filePath = `${storageLocation}\\${videoTitle}.m4a`;
         
+        let file = fs.createWriteStream(filePath, {emitClose: true})
         
-        
-        ytdl(url, {
+        let stream = ytdl(url, {
             quality: '140'
-        }).pipe(fs.createWriteStream(filePath, {emitClose: true}));
+            }).pipe(file);
         
-        //await new Promise( () => Event.on("close", fulfill));
-
-        /*ytdl(url, {
-        quality: '140'
-        }).pipe(fs.createWriteStream(filePath));*/
+        //Resolve Promise when the stream closed (after piping)
+        return new Promise((resolve, reject) => {
+            stream.on("close", resolve);
+        });
 
     }).then( () => {
         //Inform the user about the successful download
