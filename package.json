@@ -1,6 +1,6 @@
 {
   "name": "youtube-downloader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple audio and video downloader for Youtube without any viruses.",
   "main": "main.js",
   "scripts": {
@@ -13,13 +13,13 @@
   "author": "Tim Baechle",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^10.4.2",
+    "electron": "^10.4.6",
     "electron-builder": "^22.10.5"
   },
   "dependencies": {
-    "electron-updater": "^4.3.8",
+    "electron-updater": "^4.3.9",
     "ffmpeg-static": "^4.3.0",
-    "ytdl-core": "^4.5.0"
+    "ytdl-core": "^4.8.0"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",
