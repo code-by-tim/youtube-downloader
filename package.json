@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "electron-updater": "^4.3.9",
-    "ffmpeg-static": "^4.3.0",
-    "ytdl-core": "^4.8.2"
+    "ffmpeg-static": "^4.4.0",
+    "ytdl-core": "^4.8.3"
   },
   "build": {
     "appId": "com.timba.youtube-downloader",
